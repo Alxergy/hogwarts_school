@@ -2,6 +2,7 @@ package ru.hogwarts.school.service;
 
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.ResourceNotFoundException;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
@@ -22,11 +23,14 @@ public class StudentService {
     public Student getStudent(long id) {
         return studentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Студент с id " + id + " не найден"));
-
     }
 
     public Collection<Student> getStudentsByAge(int age) {
         return studentRepository.findByAge(age);
+    }
+
+    public Collection<Student> findStudentsByAgeBetween(int min, int max) {
+        return studentRepository.findByAgeBetween(min, max);
     }
 
     public Student updateStudent(Student student) {
@@ -41,5 +45,9 @@ public class StudentService {
             throw new ResourceNotFoundException("Студент с id " + id + " не найден");
         }
         studentRepository.deleteById(id);
+    }
+
+    public Faculty getStudentFaculty(long id) {
+        return getStudent(id).getFaculty();
     }
 }

@@ -3,6 +3,7 @@ package ru.hogwarts.school.service;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.ResourceNotFoundException;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.*;
@@ -28,6 +29,10 @@ public class FacultyService {
         return facultyRepository.findByColor(color);
     }
 
+    public Collection<Faculty> getFacultiesByNameIgnoreCaseOrColorIgnoreCase(String text) {
+        return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(text, text);
+    }
+
     public Faculty updateFaculty(Faculty faculty) {
         if (!facultyRepository.existsById(faculty.getId())) {
             throw new ResourceNotFoundException("Факультет с id " + faculty.getId() + " не найден");
@@ -41,5 +46,9 @@ public class FacultyService {
             throw new ResourceNotFoundException("Факультет с id " + id + " не найден");
         }
         facultyRepository.deleteById(id);
+    }
+
+    public Collection<Student> getFacultyStudents(long id) {
+        return getFaculty(id).getStudents();
     }
 }
